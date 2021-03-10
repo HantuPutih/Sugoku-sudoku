@@ -2,10 +2,13 @@ import React, { useState } from 'react'
 import { Text, View, StyleSheet, Button, Image, Dimensions } from 'react-native'
 import { PanGestureHandler } from 'react-native-gesture-handler';
 import ConfettiCannon from 'react-native-confetti-cannon';
+import { useSelector } from 'react-redux'
 
 const windowWidth = Dimensions.get('window').width;
 
-function Result({ route, navigation }) {
+function Result({ navigation }) {
+  const {username} = useSelector(state => state.userData)
+
   const [imgPosition, setImgPosition] = useState({
     x: 0,
     y: 0
@@ -27,7 +30,7 @@ function Result({ route, navigation }) {
           {"\n"}
         </Text>
         <Text style={styles.subText}>
-          "{route.params.username}"
+          "{username}"
           {"\n"} 
         </Text>
         <Text style={styles.subText}>

@@ -1,22 +1,29 @@
 import React, { useState } from 'react'
 import { Button, Text, View, StyleSheet, TextInput, Image, Dimensions, Alert } from 'react-native'
 import {Picker} from '@react-native-picker/picker'
+import { setGameBoard, setUsername, setDifficulty } from '../store/actions';
+import { useSelector, useDispatch } from 'react-redux'
+
 
 const windowWidth = Dimensions.get('window').width;
 
 
 function Home({navigation}) {
-  const [username, setUsername] = useState('')
-  const [difficulty, setDifficulty] = useState('random')
+  const {username} = useSelector(state => state.userData)
+  const {difficulty} = useSelector(state => state.userData)
+
+  const dispatch = useDispatch()
 
   const onPlaySudoku = () => {
+    dispatch(setGameBoard([]))
     if (!username) {
       Alert.alert(null,'Enter Username!')
     } else {
-      navigation.navigate('Game', {
-        username: username,
-        difficulty: difficulty
-      })
+      navigation.navigate('Game')
+      // , {
+      //   username: username,
+      //   difficulty: difficulty
+      // })
     }
   }
   return (
@@ -41,7 +48,7 @@ function Home({navigation}) {
       <View style={styles.formInput}>
         <TextInput 
           placeholder='enter username'
-          onChangeText={username => setUsername(username)}
+          onChangeText={username => dispatch(setUsername(username))}
           style={{ height: 50, width: 150,  fontSize: 20, }}
           value={username}
         >
@@ -49,7 +56,7 @@ function Home({navigation}) {
         <Picker
           selectedValue={difficulty}
           style={styles.picker}
-          onValueChange={(difficulty) => setDifficulty(difficulty)}
+          onValueChange={(difficulty) => dispatch(setDifficulty(difficulty))}
         >
           <Picker.Item label="Select Difficulty " value="random" />
           <Picker.Item label="Im a noob" value="easy" />
@@ -60,7 +67,7 @@ function Home({navigation}) {
         <Button
           title='Play Sudoku'
           onPress={onPlaySudoku}
-          />
+        />
     </View>
   )
 }
@@ -74,7 +81,7 @@ const styles = StyleSheet.create({
   },
   heading: {
     fontWeight: 'bold',
-    fontSize: 21,
+    fontSize: windowWidth / 19,
     justifyContent: 'center',
     alignItems: "center",
   },

@@ -4,93 +4,49 @@ import { StyleSheet, Text, View, Button, Alert, Dimensions, TouchableOpacity, Ac
 import BoardRow from '../components/BoardRow';
 // import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useSelector, useDispatch } from 'react-redux'
-import { fetchBoard } from '../store/actions'
+import { fetchBoard, setGameBoard, solveBoard, validateBoard } from '../store/actions'
 
 const windowWidth = Dimensions.get('window').width;
 
-export default function Game({ route, navigation }) {
+export default function Game({ navigation }) {
+  const dispatch = useDispatch()
   const {gameBoard} = useSelector(state => state.board)
   const {initialBoard} = useSelector(state => state.board)
-
-  // const [gameBoard, setGameBoard] = useState([])
-  // const [initialBoard, setInitialBoard] = useState([])
-
-  const dispatch = useDispatch()
+  const {username} = useSelector(state => state.userData)
+  const {difficulty} = useSelector(state => state.userData)
 
   function solvePress() {
-    setGameBoard([])
-    fetch('https://sugoku.herokuapp.com/solve', {
-      method: 'POST',
-      body: encodeParams({board: initialBoard}),
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-    })
-      .then(response => response.json())
-      .then(response => {
-        // console.log(response.solution)
-        setGameBoard(response.solution)
-      }
-      )
-      .catch(console.warn)
+    dispatch(setGameBoard([]))
+    dispatch(solveBoard(initialBoard))
   }
 
   function submitPress() {
     // console.log({board});
-    fetch('https://sugoku.herokuapp.com/validate', {
-      method: 'POST',
-      body: encodeParams({board: gameBoard}),
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-    })
-      .then(response => response.json())
-      .then(response => {
-        if (response.status !== 'solved') {
-          Alert.alert(
-            response.status,
-            'Check your board and try again!',
-          )
-        } else {
-          navigation.navigate('Result', {
-            username: route.params.username,
-          })
-        }
-      }
-      )
-      .catch(console.warn)
+    dispatch(validateBoard(gameBoard, navigation))
   }
 
   function restartPress() {
-    setGameBoard([])
-    fetch('https://sugoku.herokuapp.com/board?difficulty=' + route.params.difficulty)
-    .then((res) => res.json() )
-    .then((data) => {
-      setGameBoard(data.board.map(row => [...row]))
-      setInitialBoard(data.board.map(row => [...row]))
-    })
+    dispatch(setGameBoard([]))
+    dispatch(fetchBoard(difficulty))
   }
 
   useEffect(() => {
-    dispatch(fetchBoard(route.params.difficulty))
-    // fetch('https://sugoku.herokuapp.com/board?difficulty=' + route.params.difficulty)
-    // .then((res) => res.json() )
-    // .then((data) => {
-    //   // let convertBoard = JSON.parse(JSON.stringify(data.board))
-    //   setGameBoard(data.board)
-    //   setInitialBoard(data.board.map(row => [...row]))
-    // })
-  }, [])
+    dispatch(fetchBoard(difficulty))
+  }, [dispatch])
 
   const handleInputUserToBoard = (i, j, n) => {
     // console.log(i, j, n );
     let userInputBoard = gameBoard.map(row => [...row])
     userInputBoard[i][j] = +n
-    setGameBoard(userInputBoard)
+    dispatch(setGameBoard(userInputBoard))
   }
   
   return (
     <View style={styles.container}>
       <View style={styles.headingCont}>
         <Text style={styles.heading}>Hektipeit Sudoku</Text>
-        <Text>Username: {route.params.username}</Text>
-        <Text>Difficulty: {route.params.difficulty}</Text>
+        <Text>Username: {username}</Text>
+        <Text>Difficulty: {difficulty}</Text>
       </View>
       <StatusBar style="auto" />
         <View style={styles.board}>
@@ -126,13 +82,6 @@ export default function Game({ route, navigation }) {
     </View>
   );
 }
-
-const encodeBoard = (board) => board.reduce((result, row, i) => result + `%5B${encodeURIComponent(row)}%5D${i === board.length -1 ? '' : '%2C'}`, '')
-
-const encodeParams = (params) => 
-  Object.keys(params)
-  .map(key => key + '=' + `%5B${encodeBoard(params[key])}%5D`)
-  .join('&');
 
 const styles = StyleSheet.create({
   container: {
