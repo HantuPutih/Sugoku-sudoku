@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button, Text, View, StyleSheet, TextInput, Image, Dimensions } from 'react-native'
+import { Button, Text, View, StyleSheet, TextInput, Image, Dimensions, Alert } from 'react-native'
 import {Picker} from '@react-native-picker/picker'
 
 const windowWidth = Dimensions.get('window').width;
@@ -11,8 +11,7 @@ function Home({navigation}) {
 
   const onPlaySudoku = () => {
     if (!username) {
-      // console.log('enter username');
-      alert('Enter Username')
+      Alert.alert(null,'Enter Username!')
     } else {
       navigation.navigate('Game', {
         username: username,

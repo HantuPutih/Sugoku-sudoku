@@ -1,19 +1,17 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
-import { FlatList, StyleSheet, Text, View, Button, TextInput, ScrollView, Alert, Dimensions, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { StyleSheet, Text, View, Button, Alert, Dimensions, TouchableOpacity, ActivityIndicator } from 'react-native';
 import BoardRow from '../components/BoardRow';
-// import { Button } from 'react-native-paper';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+// import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const windowWidth = Dimensions.get('window').width;
 
 export default function Game({ route, navigation }) {
-  const [board, setBoard] = useState([])
+  const [gameBoard, setGameBoard] = useState([])
   const [initialBoard, setInitialBoard] = useState([])
 
   function solvePress() {
-    // console.log(initialBoard);
-    setBoard([])
+    setGameBoard([])
     fetch('https://sugoku.herokuapp.com/solve', {
       method: 'POST',
       body: encodeParams({board: initialBoard}),
@@ -21,18 +19,18 @@ export default function Game({ route, navigation }) {
     })
       .then(response => response.json())
       .then(response => {
-        console.log(response.solution)
-        setBoard(response.solution)
+        // console.log(response.solution)
+        setGameBoard(response.solution)
       }
       )
       .catch(console.warn)
   }
 
-  function submitPress(payload) {
-    console.log({board});
+  function submitPress() {
+    // console.log({board});
     fetch('https://sugoku.herokuapp.com/validate', {
       method: 'POST',
-      body: encodeParams({board}),
+      body: encodeParams({board: gameBoard}),
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
     })
       .then(response => response.json())
@@ -47,19 +45,17 @@ export default function Game({ route, navigation }) {
             username: route.params.username,
           })
         }
-        console.log(response)
       }
       )
       .catch(console.warn)
   }
 
   function restartPress() {
-    setBoard([])
+    setGameBoard([])
     fetch('https://sugoku.herokuapp.com/board?difficulty=' + route.params.difficulty)
     .then((res) => res.json() )
     .then((data) => {
-      console.log(data.board)
-      setBoard(data.board.map(row => [...row]))
+      setGameBoard(data.board.map(row => [...row]))
       setInitialBoard(data.board.map(row => [...row]))
     })
   }
@@ -68,18 +64,17 @@ export default function Game({ route, navigation }) {
     fetch('https://sugoku.herokuapp.com/board?difficulty=' + route.params.difficulty)
     .then((res) => res.json() )
     .then((data) => {
-      // console.log(data.board)
       // let convertBoard = JSON.parse(JSON.stringify(data.board))
-      setBoard(data.board)
+      setGameBoard(data.board)
       setInitialBoard(data.board.map(row => [...row]))
     })
   }, [])
 
-  const setTheBoard = (i, j, n) => {
+  const handleInputUserToBoard = (i, j, n) => {
     // console.log(i, j, n );
-    let userInputBoard = board.map(row => [...row])
+    let userInputBoard = gameBoard.map(row => [...row])
     userInputBoard[i][j] = +n
-    setBoard(userInputBoard)
+    setGameBoard(userInputBoard)
   }
   
   return (
@@ -92,12 +87,12 @@ export default function Game({ route, navigation }) {
       <StatusBar style="auto" />
         <View style={styles.board}>
           {
-            board.length !== 0 ? board.map((row, index) => {
-              return <BoardRow row={row} i={index} key={index} 
-              setTheBoard={setTheBoard}
-              initialBoardI={initialBoard[index]}
+            gameBoard.length !== 0 ? 
+            gameBoard.map((row, rowIdx) => {
+              return <BoardRow row={row} i={rowIdx} key={rowIdx} 
+              handleInputUserToBoard={handleInputUserToBoard}
+              initialBoardI={initialBoard[rowIdx]}
               />
-              
             })
             : 
             <View>
@@ -111,14 +106,14 @@ export default function Game({ route, navigation }) {
             <Button onPress={submitPress} title='validate board'></Button>
           </View>
           <View style={{margin: 10}}>
-            <Button onPress={solvePress} title='solve board' color='#6b8e23'></Button>
+            <Button onPress={restartPress} title='load new board' color='#6b8e23'></Button>
           </View>
         </View>
-        <TouchableOpacity
+          <TouchableOpacity
             style={styles.button}
-            onPress={restartPress}
+            onPress={solvePress}
           >
-            <Text>Load New Board</Text>
+            <Text>Give Up</Text>
           </TouchableOpacity>
     </View>
   );
@@ -139,7 +134,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around'
   },
   heading: {
-    fontSize: 30,
+    fontSize: windowWidth /10,
     color: '#caa472',
     textShadowColor: '#797979',
     textShadowOffset: {width: 1.5, height: 1},
@@ -161,18 +156,6 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
   },
-  btn: {
-    margin: 10,
-    paddingTop: 10,
-    paddingBottom: 10,
-    paddingLeft: 17,
-    paddingRight: 17,
-    backgroundColor: '#007AFF',
-    alignItems: "center",
-    color: 'white',
-    borderRadius: 2,
-    fontSize: 20,
-  },
   headingCont: {
     justifyContent: 'center',
     alignItems: 'center'
@@ -180,6 +163,7 @@ const styles = StyleSheet.create({
   button: {
     alignItems: "center",
     backgroundColor: "#DDDDDD",
-    padding: 10
+    padding: 10,
+    borderRadius: 2,
   }
 });

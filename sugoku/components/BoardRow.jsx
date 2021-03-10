@@ -1,18 +1,15 @@
-import { StyleSheet, Text, View, Button,TextInput } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import { StyleSheet, View } from 'react-native';
+import React from 'react';
 import ColBox from './ColBox';
 
-export default function BoardRow({row, i, setTheBoard, initialBoardI }) {
-//initialBoardI
-// console.log(initialBoardI, '================================================');
+export default function BoardRow({row, i, handleInputUserToBoard, initialBoardI }) {
   return (
     <View style={styles.containerRow}>
       {
-        row.map((rowChild, index) => {
-          // console.log(initialBoardI[index], '++++++++++++++++++++++++++++++++++++++++++++');
-          return <ColBox NChild={rowChild} i={i} j={index} key={index} 
-          setTheBoard={setTheBoard}
-          initialBoardIJ={initialBoardI ? initialBoardI[index] : null}
+        row.map((rowChild, colIdx) => {
+          return <ColBox colChild={rowChild} i={i} j={colIdx} key={colIdx} 
+          handleInputUserToBoard={handleInputUserToBoard}
+          initialBoardIJ={initialBoardI ? initialBoardI[colIdx] : null}
           />
         })
       }

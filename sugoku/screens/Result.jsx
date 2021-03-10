@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Text, View, StyleSheet, Button, Image, Dimensions } from 'react-native'
 import { PanGestureHandler } from 'react-native-gesture-handler';
+import ConfettiCannon from 'react-native-confetti-cannon';
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -17,6 +18,7 @@ function Result({ route, navigation }) {
       y: translationY
     })
   }
+  
   return (
     <View style={styles.container}>
       <View style={{alignItems: 'center'}}>
@@ -29,7 +31,7 @@ function Result({ route, navigation }) {
           {"\n"} 
         </Text>
         <Text style={styles.subText}>
-          you solved the board! GG
+          you solved the board! GG!
         </Text>
       </View>
       <PanGestureHandler onGestureEvent={handleGesture}> 
@@ -50,11 +52,12 @@ function Result({ route, navigation }) {
       </PanGestureHandler>
       
       <Button
+        color='#28a745'
         title='play again'
         onPress={()=> navigation.navigate('Home')}
       />
-    </View>
-    
+        <ConfettiCannon count={200} fallSpeed={6000} origin={{x: windowWidth/ 2, y: -15}} />
+    </View> 
   )
 }
 
@@ -66,15 +69,15 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around'
   },
   title: {
-    fontSize: windowWidth / 12,
+    fontSize: windowWidth / 14,
     fontWeight: 'bold'
   },
   subText: {
     fontSize: windowWidth / 20
   },
   img: {
-    width: windowWidth / 2,
-    height: windowWidth / 2,
+    width: windowWidth / 1.5,
+    height: windowWidth / 1.5,
   },
 });
 

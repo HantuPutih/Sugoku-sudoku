@@ -4,14 +4,14 @@ import Home from "./screens/Home";
 import Game from "./screens/Game";
 import Result from "./screens/Result";
 import { NavigationContainer } from '@react-navigation/native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { StyleSheet } from 'react-native';
+// import { SafeAreaView } from 'react-native-safe-area-context';
+import { StyleSheet, Platform, StatusBar, View } from 'react-native';
 
 const Stack = createStackNavigator();
 
 function App() {
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <NavigationContainer>
         <Stack.Navigator initialRouteName="Home" screenOptions={{headerShown: false}}>
           <Stack.Screen name="Home" component={Home} />
@@ -19,15 +19,17 @@ function App() {
           <Stack.Screen name="Result" component={Result} />
         </Stack.Navigator>
       </NavigationContainer>
-    </SafeAreaView>
+    </View>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: -15,
-    backgroundColor: 'ghostwhite'
+    // paddingTop: -15,
+    backgroundColor: 'ghostwhite',
+    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight-15 : 0
+
   },
 });
 
