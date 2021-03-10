@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
-import { Button, Text, View, StyleSheet, TextInput, Image } from 'react-native'
+import { Button, Text, View, StyleSheet, TextInput, Image, Dimensions } from 'react-native'
 import {Picker} from '@react-native-picker/picker'
+
+const windowWidth = Dimensions.get('window').width;
 
 
 function Home({navigation}) {
@@ -9,15 +11,13 @@ function Home({navigation}) {
 
   const onPlaySudoku = () => {
     if (!username) {
-      console.log('enter username');
-      alert('enter username')
+      // console.log('enter username');
+      alert('Enter Username')
     } else {
       navigation.navigate('Game', {
         username: username,
         difficulty: difficulty
       })
-      // setUsername('')
-      // setDifficulty('random')
     }
   }
   return (
@@ -30,12 +30,15 @@ function Home({navigation}) {
           enter username and difficulty
         </Text>
       </View>
-      <Image
-        style={styles.img}
-        source={{
-          uri: 'https://theenglishfarm.com/sites/default/files/styles/featured_image/public/harold_2.jpg?itok=uo6h4hz4',
-        }}
-      />
+      <View style={styles.imgCont}>
+        <Image
+          style={styles.img}
+          source={{
+            uri: 'https://theenglishfarm.com/sites/default/files/styles/featured_image/public/harold_2.jpg?itok=uo6h4hz4',
+          }}
+        />
+      </View>
+      
       <View style={styles.formInput}>
         <TextInput 
           placeholder='enter username'
@@ -51,12 +54,12 @@ function Home({navigation}) {
         >
           <Picker.Item label="Select Difficulty " value="random" />
           <Picker.Item label="Im a noob" value="easy" />
-          <Picker.Item label="not too hard, not too easy" value="medium" />
-          <Picker.Item label="this game is for kids" value="hard" />
+          <Picker.Item label="Not too hard, Not too easy" value="medium" />
+          <Picker.Item label="This game is for kids!" value="hard" />
         </Picker>
       </View>
         <Button
-          title='Play sudoku'
+          title='Play Sudoku'
           onPress={onPlaySudoku}
           />
     </View>
@@ -74,11 +77,15 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 21,
     justifyContent: 'center',
-    alignItems: "center"
+    alignItems: "center",
   },
   formInput: {
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    elevation: 3,
+    backgroundColor: 'ghostwhite',
+    paddingHorizontal: windowWidth / 5.6,
+    borderRadius: 3,
 
   },
   picker: {
@@ -86,13 +93,19 @@ const styles = StyleSheet.create({
     width: 200,
     fontSize: 19,
     justifyContent: 'center',
-    textAlign: 'center'
+    textAlign: 'center',
+
   },
   img: {
-    width: 500,
-    height: 250,
+    width: windowWidth -50,
+    height: windowWidth / 2,
+    borderRadius: 10,
   },
-
+  imgCont: {
+    elevation: 6,
+    backgroundColor: 'white',
+    borderRadius: 10,
+  }
 });
 
 export default Home

@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
-import { FlatList, StyleSheet, Text, View, Button, TextInput, ScrollView, Alert, Dimensions, TouchableOpacity } from 'react-native';
+import { FlatList, StyleSheet, Text, View, Button, TextInput, ScrollView, Alert, Dimensions, TouchableOpacity, ActivityIndicator } from 'react-native';
 import BoardRow from '../components/BoardRow';
 // import { Button } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -99,23 +99,14 @@ export default function Game({ route, navigation }) {
               />
               
             })
-            : <Text>Loading Board...</Text>
+            : 
+            <View>
+              <ActivityIndicator size="large" color="#6b8e23" />
+              <Text>Loading Board...</Text>
+            </View>
           }
         </View>
         <View style={styles.containerBtn}>
-          {/* <TouchableOpacity
-            style={styles.btn}
-            onPress={submitPress}
-            // color="white"
-          >
-            <Text>validate</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.btn}
-            onPress={solvePress}
-          >
-            <Text>Give up?</Text>
-          </TouchableOpacity> */}
           <View style={{margin: 10}}>
             <Button onPress={submitPress} title='validate board'></Button>
           </View>
@@ -129,7 +120,6 @@ export default function Game({ route, navigation }) {
           >
             <Text>Load New Board</Text>
           </TouchableOpacity>
-          {/* <Button style={styles.btn} color='#6b8e23' onPress={restartPress} title='Load New board'></Button> */}
     </View>
   );
 }
@@ -151,6 +141,9 @@ const styles = StyleSheet.create({
   heading: {
     fontSize: 30,
     color: '#caa472',
+    textShadowColor: '#797979',
+    textShadowOffset: {width: 1.5, height: 1},
+    textShadowRadius: 1
   },
   board: {
     borderWidth: 2,
@@ -160,13 +153,13 @@ const styles = StyleSheet.create({
     width: windowWidth - 60,
     height: windowWidth - 60,
     alignItems: 'center', 
-    justifyContent: 'center'
+    justifyContent: 'center',
+    elevation: 6,
 
   },
   containerBtn: {
     display: 'flex',
     flexDirection: 'row',
-    // justifyContent: 'space-between'
   },
   btn: {
     margin: 10,

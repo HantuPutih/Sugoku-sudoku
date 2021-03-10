@@ -7,25 +7,27 @@ function ColBox({NChild, i, j, setTheBoard, initialBoardIJ}) {
   // initialBoardIJ
   const [n, setN] = useState(NChild)
   const [editable, setEditable] = useState(false)
-  const [num, setNum] = useState(0)
 
   function updateN(text) {
     // setN(n)
     // console.log(initialBoard[i][j]);
     setTheBoard(i, j, text)
-    console.log(text);
+    // console.log(text);
   }
   
   function edit() {
-    let editableeee = n == initialBoardIJ && n !==0 ? false : true
-    return editableeee
+    let isEdit = n == initialBoardIJ && n !==0 ? false : true
+    return isEdit
   }
   // useEffect(() => {
   //   edit()
   // }, [])
+  // function handleOnFocus() {
+    // styles.num.backgroundColor= '#ededed'
+  // } 
 
   return (
-    <View style={styles.containerNum}>
+    <View style={ edit() ? styles.containerNum : styles.containerNumNoEdit }>
       {
         edit() ? 
         <TextInput
@@ -36,9 +38,11 @@ function ColBox({NChild, i, j, setTheBoard, initialBoardIJ}) {
           onChangeText={text => updateN(text)} 
           maxLength={1}
           editable
+          // onFocus={() => handleOnFocus() }
           value={n ? n.toString() : null}
-          />
-        : <Text style={styles.num} >{n}</Text>
+          /> 
+          // {n ? n.toString() : null} </TextInput> 
+        : <Text style={styles.numNotEdit} >{n}</Text>
       }
     </View>
   )
@@ -53,7 +57,16 @@ const styles = StyleSheet.create({
     borderWidth: 1.2,
     textAlign: 'center',
     justifyContent: 'center',
-    borderRadius: 1
+    borderRadius: 1,
+  },
+  containerNumNoEdit: {
+    borderColor: "#20232a",
+    padding: 5,
+    borderWidth: 1.2,
+    textAlign: 'center',
+    justifyContent: 'center',
+    borderRadius: 1,
+    backgroundColor: '#c7ae8d'
   },
   num: {
     fontSize: 19,
@@ -62,5 +75,18 @@ const styles = StyleSheet.create({
     width: (windowWidth -200) / 9,
     height: (windowWidth -200) / 9,
     // color: "#FFFFFF"
+  },
+  numNotEdit: {
+    fontSize: 19,
+    textAlign: 'center',
+    justifyContent: 'center',
+    width: (windowWidth -200) / 9,
+    height: (windowWidth -200) / 9,
+    marginTop: -9,
+    // color: '#0054ba',
+    fontWeight: 'bold',
+    textShadowColor: '#797979',
+    textShadowOffset: {width: 1, height: 1},
+    textShadowRadius: 3,
   }
 });

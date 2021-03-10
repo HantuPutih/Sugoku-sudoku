@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
-import { Text, View, StyleSheet, Button, Image } from 'react-native'
+import { Text, View, StyleSheet, Button, Image, Dimensions } from 'react-native'
 import { PanGestureHandler } from 'react-native-gesture-handler';
+
+const windowWidth = Dimensions.get('window').width;
 
 function Result({ route, navigation }) {
   const [imgPosition, setImgPosition] = useState({
@@ -27,7 +29,7 @@ function Result({ route, navigation }) {
           {"\n"} 
         </Text>
         <Text style={styles.subText}>
-          you solved the board!
+          you solved the board! GG
         </Text>
       </View>
       <PanGestureHandler onGestureEvent={handleGesture}> 
@@ -64,15 +66,15 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around'
   },
   title: {
-    fontSize: 27,
+    fontSize: windowWidth / 12,
     fontWeight: 'bold'
   },
   subText: {
-    fontSize: 20
+    fontSize: windowWidth / 20
   },
   img: {
-    width: 255,
-    height: 255,
+    width: windowWidth / 2,
+    height: windowWidth / 2,
   },
 });
 
