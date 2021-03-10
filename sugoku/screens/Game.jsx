@@ -3,12 +3,19 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Button, Alert, Dimensions, TouchableOpacity, ActivityIndicator } from 'react-native';
 import BoardRow from '../components/BoardRow';
 // import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useSelector, useDispatch } from 'react-redux'
+import { fetchBoard } from '../store/actions'
 
 const windowWidth = Dimensions.get('window').width;
 
 export default function Game({ route, navigation }) {
-  const [gameBoard, setGameBoard] = useState([])
-  const [initialBoard, setInitialBoard] = useState([])
+  const {gameBoard} = useSelector(state => state.board)
+  const {initialBoard} = useSelector(state => state.board)
+
+  // const [gameBoard, setGameBoard] = useState([])
+  // const [initialBoard, setInitialBoard] = useState([])
+
+  const dispatch = useDispatch()
 
   function solvePress() {
     setGameBoard([])
@@ -61,13 +68,14 @@ export default function Game({ route, navigation }) {
   }
 
   useEffect(() => {
-    fetch('https://sugoku.herokuapp.com/board?difficulty=' + route.params.difficulty)
-    .then((res) => res.json() )
-    .then((data) => {
-      // let convertBoard = JSON.parse(JSON.stringify(data.board))
-      setGameBoard(data.board)
-      setInitialBoard(data.board.map(row => [...row]))
-    })
+    dispatch(fetchBoard(route.params.difficulty))
+    // fetch('https://sugoku.herokuapp.com/board?difficulty=' + route.params.difficulty)
+    // .then((res) => res.json() )
+    // .then((data) => {
+    //   // let convertBoard = JSON.parse(JSON.stringify(data.board))
+    //   setGameBoard(data.board)
+    //   setInitialBoard(data.board.map(row => [...row]))
+    // })
   }, [])
 
   const handleInputUserToBoard = (i, j, n) => {
