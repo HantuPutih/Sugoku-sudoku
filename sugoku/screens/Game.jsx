@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Button, Alert, Dimensions, TouchableOpacity, ActivityIndicator } from 'react-native';
+import React, { useEffect } from 'react';
+import { StyleSheet, Text, View, Button, Dimensions, TouchableOpacity, ActivityIndicator } from 'react-native';
 import BoardRow from '../components/BoardRow';
 // import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useSelector, useDispatch } from 'react-redux'
@@ -21,7 +21,6 @@ export default function Game({ navigation }) {
   }
 
   function submitPress() {
-    // console.log({board});
     dispatch(validateBoard(gameBoard, navigation))
   }
 
@@ -35,7 +34,6 @@ export default function Game({ navigation }) {
   }, [dispatch])
 
   const handleInputUserToBoard = (i, j, n) => {
-    // console.log(i, j, n );
     let userInputBoard = gameBoard.map(row => [...row])
     userInputBoard[i][j] = +n
     dispatch(setGameBoard(userInputBoard))

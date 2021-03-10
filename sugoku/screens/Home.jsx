@@ -1,12 +1,10 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Button, Text, View, StyleSheet, TextInput, Image, Dimensions, Alert } from 'react-native'
 import {Picker} from '@react-native-picker/picker'
 import { setGameBoard, setUsername, setDifficulty } from '../store/actions';
 import { useSelector, useDispatch } from 'react-redux'
 
-
 const windowWidth = Dimensions.get('window').width;
-
 
 function Home({navigation}) {
   const {username} = useSelector(state => state.userData)

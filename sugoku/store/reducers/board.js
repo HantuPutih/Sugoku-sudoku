@@ -3,7 +3,7 @@ const initialState = {
   initialBoard: []
 }
 
-export default function board(state = initialState, { type, payload }) {
+export default function boardReducer(state = initialState, { type, payload }) {
   switch (type) {
   case 'GAME_BOARD/SET_GAME_BOARD':
     return { ...state, gameBoard: payload }

@@ -1,6 +1,5 @@
 import { Alert } from 'react-native';
 
-
 export const setGameBoard = (payload) => ({
   type: 'GAME_BOARD/SET_GAME_BOARD',
   payload
@@ -10,7 +9,6 @@ export const setInitialBoard = (payload) => ({
   type: 'INITIAL_BOARD/SET_INITIAL_BOARD_BOARD',
   payload
 })
-
 
 export function fetchBoard(difficulty) {
   return dispatch => {
@@ -40,7 +38,6 @@ export function solveBoard(initialBoard) {
   }
 }
 
-
 export function validateBoard(userBoard, navigation) {
   return dispatch => {
     fetch('https://sugoku.herokuapp.com/validate', {
@@ -65,7 +62,6 @@ export function validateBoard(userBoard, navigation) {
   }
 }
 
-
 const encodeBoard = (board) => board.reduce((result, row, i) => result + `%5B${encodeURIComponent(row)}%5D${i === board.length -1 ? '' : '%2C'}`, '')
 
 const encodeParams = (params) => 
@@ -75,7 +71,6 @@ const encodeParams = (params) =>
 
 
 // user
-
 export const setUsername = (payload) => ({
   type: 'USER_DATA/SET_USERNAME',
   payload
