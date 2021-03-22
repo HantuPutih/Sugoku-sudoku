@@ -6,19 +6,24 @@ import Result from "./screens/Result";
 import { NavigationContainer } from '@react-navigation/native';
 // import { SafeAreaView } from 'react-native-safe-area-context';
 import { StyleSheet, Platform, StatusBar, View } from 'react-native';
+import { Provider } from 'react-redux'
+import store from './store'
+
 
 const Stack = createStackNavigator();
 
 function App() {
   return (
     <View style={styles.container}>
-      <NavigationContainer>
-        <Stack.Navigator initialRouteName="Home" screenOptions={{headerShown: false}}>
-          <Stack.Screen name="Home" component={Home} />
-          <Stack.Screen name="Game" component={Game} />
-          <Stack.Screen name="Result" component={Result} />
-        </Stack.Navigator>
-      </NavigationContainer>
+      <Provider store={store}>
+        <NavigationContainer>
+          <Stack.Navigator initialRouteName="Home" screenOptions={{headerShown: false}}>
+            <Stack.Screen name="Home" component={Home} />
+            <Stack.Screen name="Game" component={Game} />
+            <Stack.Screen name="Result" component={Result} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </Provider>
     </View>
   )
 }
